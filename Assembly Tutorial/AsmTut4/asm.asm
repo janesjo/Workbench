@@ -11,6 +11,7 @@ someFunction proc
 	; mov dest, src 
 	; Source can be immediate vaule, general purpose register, segment register or memory location
 	; Destination can be general purpose register, segment register or memory location
+	;
 	mov al, byte ptr [myByte] ; or mov al, myByte
 	mov ax, word ptr [myWord]
 	mov eax, dword ptr [myDWord]
