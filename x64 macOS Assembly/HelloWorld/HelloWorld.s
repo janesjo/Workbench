@@ -1,18 +1,20 @@
-    .globl  _main           # set start point of program
+# HelloWorld /w stdout
+# hello_asm.s
+# as hello_asm.s -o hello_asm.o
+# ld hello_asm.o -e _main -o hello_asm
+.section __DATA,__data
+str:
+  .asciz "Hello world!\n"
 
-message:                                 
-    .asciz "Hello World\n"
+.section __TEXT,__text
+.globl _main
+_main:
+  movl $0x2000004, %eax           # preparing system call 4
+  movl $1, %edi                    # STDOUT file descriptor is 1
+  movq str@GOTPCREL(%rip), %rsi   # The value to print
+  movq $100, %rdx                 # the size of the value to print
+  syscall
 
-_main:                      # program starts here               
-    push    %ebp            # save base-pointer register 
-    sub     $8, %esp        # reserve bytes from stack to call _printf
-
-    lea     message, %eax   # get memory address of message string...
-    mov     %eax, (%esp)    # ...and store it into reserved stack area
-
-    call    _printf         # display a "Hello World" on console
-
-    add     $8, %esp        # free up reserved stack memory
-    pop     %ebp            # restore base-pointer register 
-    xor     %eax, %eax      # set return code to zero
-    ret                     # exit program
+  movl $0, %ebx
+  movl $0x2000001, %eax           # exit 0
+  syscall
